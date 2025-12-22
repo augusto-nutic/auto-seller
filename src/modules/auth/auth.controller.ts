@@ -1,4 +1,4 @@
-import { Controller, Post, Body, NotFoundException, Res, Req } from '@nestjs/common';
+import { Controller, Post, Body, NotFoundException, Res, Req,UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { loginSchema } from './schema/login.schema';
 import { ZodValidationPipe } from 'src/pipes/zod/zod.validatePipe';
@@ -8,6 +8,8 @@ import { Response, Request } from 'express';
 import { createUserSchema } from '../user/schemas/create-user.schema';
 import { Prisma } from '@prisma/client';
 import { UserService } from '../user/user.service';
+import { JwtAuthGuard } from '../auth/JWT/jwt.guard';
+
 
 @Controller('auth')
 export class AuthController {
@@ -16,8 +18,6 @@ export class AuthController {
     private prisma: PrismaService,
     private UserService: UserService,
   ) { }
-
-
 
   @Post('register')
     async create(
@@ -68,6 +68,8 @@ export class AuthController {
 
     return user;
   }
+
+  @UseGuards(JwtAuthGuard)
   @Post('request-verification')
   async varifyAccount(@Body() body: { email: string }) {
     const { email } = body;
@@ -78,10 +80,14 @@ export class AuthController {
     return await this.authService.handleRequestVerification(email);
 
   }
+
   @Post('verify-account')
   async verifyAccount(@Body('token') token: string) {
     return this.authService.handleVerificationAccount(token);
   }
+
+
+
   @Post('forgot-password')
   async forgotPassword(@Body('email') email: string) {
 
@@ -91,16 +97,16 @@ export class AuthController {
     return await this.authService.handleForgotPassword(email);
 
   }
+
   @Post('reset-password')
   async resetPassword(@Body((new ZodValidationPipe(resetPasswordSchema))) data: resetPasswordType) {
     return this.authService.handleResetPassword(data.token, data.newPassword);
   }
+
+  @UseGuards(JwtAuthGuard)
   @Post('refresh')
   refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     return this.authService.refreshAccessToken(req, res);
   }
-
-
-
 
 }

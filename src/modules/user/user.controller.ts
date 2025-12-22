@@ -4,7 +4,6 @@ import { Prisma } from '@prisma/client';
 import { ZodValidationPipe } from 'src/pipes/zod/zod.validatePipe';
 import { createUserSchema } from './schemas/create-user.schema';
 import { JwtAuthGuard } from '../auth/JWT/jwt.guard';
-import { Response } from 'express';
 
 
 @Controller('user')
