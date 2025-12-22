@@ -64,7 +64,6 @@ export class AuthController {
   async resetPassword(@Body((new ZodValidationPipe(resetPasswordSchema))) data: resetPasswordType) {
     return this.authService.handleResetPassword(data.token, data.newPassword);
   }
-
   @Post('refresh')
   refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     return this.authService.refreshAccessToken(req, res);

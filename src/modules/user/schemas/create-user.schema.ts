@@ -18,3 +18,5 @@ export const createUserSchema = z.object({
   contact_2: z.string().optional(),
   address: AddressSchema.optional(),  
 });
+
+export type CreateUserType = z.infer<typeof createUserSchema>;

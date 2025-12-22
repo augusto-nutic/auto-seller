@@ -8,13 +8,11 @@ import { Response } from 'express';
 
 
 @Controller('user')
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(
     private readonly UserService: UserService,
   ) { }
-
- 
 
   @Post('register')
   async create(
@@ -40,9 +38,6 @@ export class UserController {
 
     return user
   }
-
-
-
 
   @Get("teste")
   findAll() {
