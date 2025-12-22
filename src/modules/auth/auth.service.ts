@@ -1,5 +1,5 @@
 import { BadRequestException, Inject, Injectable,  ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
+import { PrismaService } from '../database/database.service';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { JwtService } from '@nestjs/jwt';
@@ -11,12 +11,12 @@ import { Request,Response } from 'express';
 @Injectable()
 export class AuthService {
   constructor(@Inject()
-  private prisma: DatabaseService,
+  private prisma: PrismaService,
     private jwtService: JwtService,
     private config: ConfigService,
     private mailService: MailService
-  ) { }
-
+  ) {
+  }
    async login(data: { email: string; password: string }) {
     const user = await this.prisma.user.findUnique({
       where: { email: data.email },
@@ -56,6 +56,7 @@ export class AuthService {
     const expiresAt = new Date(Date.now() + 1000 * 60 * 30);
 
     try {
+      
       await this.prisma.accountVerifyToken.upsert({
         where: { email },
         update: {

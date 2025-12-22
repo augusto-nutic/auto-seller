@@ -2,13 +2,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-enum crdb_internal_region {
-  gcp_southamerica_east1 @map("gcp-southamerica-east1")
-}
 
 datasource db {
-  provider = "mysql"
-  url      = "mysql://root:1234@localhost:3306/nest"
+  provider = "postgresql"  
 }
 
 model Address {
@@ -24,30 +20,6 @@ model Address {
   user        User?    @relation( fields: [user_id], references: [id])
 }
 
-enum Subs_Status {
-  NULL
-  ACTIVE
-  PEDING
-  DISABLED
-}
-enum Plan {
-  BASIC
-  PRO
-  PREMIUM
-  NULL
-}
-
-model Signature{
-  id                String   @id @default(uuid())
-  name              String
-  unit_amount       Int
-  stripeProductId   String?   
-  stripePriceId     String?  
-  userID            String
-  client            User   @relation(fields: [userID], references: [id])
-  createdAt         DateTime @default(now())
-}
-
 model User {
   //personal data
   id           String  @id @unique @default(uuid())
@@ -61,41 +33,21 @@ model User {
   address      Address?  
   AccountVerification Boolean @default(false)
   
-  //stripe
-  stripe_verification Boolean @default(false)
-  subscription_Status Subs_Status @default(NULL)
-  plan Plan @default(NULL)
-  subscription_id String?
-  currentPeriodEnd  DateTime?
-  stripe_id    String? @unique
-  stripe_connect_id   String?  @unique
-  
   //timestamp
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
   
    
-  Customer Customer[]
-  Signature Signature[]
 }
 
-model Customer {
-  id                String   @id @default(cuid())
-  name              String
-  email             String
-  cpf               String
-  phone             String?
-  subscription_Status Subs_Status @default(NULL)
-  stripeCustomerId  String  
-  user              User     @relation(fields: [userID], references: [id])
-  userID            String
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  address          String?
-  @@unique([cpf, userID])
-  @@unique([email, userID])  
-  @@index([userID])
+ model AccountVerifyToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  email     String   @unique 
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }
+
 
 model PasswordResetToken {
   id        String   @id @default(uuid())
@@ -105,21 +57,5 @@ model PasswordResetToken {
   createdAt DateTime @default(now())
 }
 
-model AccountVerifyToken {
-  id        String   @id @default(uuid())
-  token     String   @unique
-  email     String   @unique 
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-}
-
-model StripeVerifyToken {
-  id                 String   @id @default(uuid())
-  token              String   @unique
-  email              String   @unique 
-  stripeConnectId    String   @unique 
-  expiresAt          DateTime
-  createdAt          DateTime @default(now())
-}
 
 

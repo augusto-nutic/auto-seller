@@ -1,10 +1,9 @@
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
+import { PrismaService } from '../database/database.service';
 import { Prisma } from '@prisma/client';
 import * as b from "bcrypt"
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config';
-import { StripeService } from '../stripe/stripe.service';
 
 
 
@@ -12,10 +11,9 @@ import { StripeService } from '../stripe/stripe.service';
 export class UserService {
 
   constructor
-    (@Inject() private prisma: DatabaseService,
+    (@Inject() private prisma: PrismaService,
       private jwtService: JwtService,
       private config: ConfigService,
-      private stripe: StripeService
     ) { }
 
   async create(data: Prisma.UserCreateInput) {
@@ -112,41 +110,6 @@ export class UserService {
     }
   }
   
-  async deleteAllUsers() {
-
-    const users = await this.prisma.user.findMany({
-      select: {
-        stripe_id: true,
-        stripe_connect_id: true,
-      },
-    });
-
-
-    for (const user of users) {
-      try {
-        if (user.stripe_id) {
-          await this.stripe.deleteCustomer(user.stripe_id);
-        }
-
-        if (user.stripe_connect_id) {
-          await this.stripe.deleteConnectAccount(user.stripe_connect_id);
-        }
-      } catch (error) {
-        console.error(
-          `Erro ao deletar dados Stripe do usuário: ${user.stripe_id || user.stripe_connect_id}`,
-          error.message,
-        );
-      }
-    }
-
-    await this.prisma.customer.deleteMany();
-    await this.prisma.address.deleteMany();
-
-    const result = await this.prisma.user.deleteMany();
-
-    return result.count;
-  }
-
   async findByEmail(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     return user;

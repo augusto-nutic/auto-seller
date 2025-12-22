@@ -1,17 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { DatabaseService } from '../database/database.service';
+import { PrismaService } from '../database/database.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './JWT/jwt.strategy';
 import { UserService } from '../user/user.service';
 import { MailService } from '../mailer/mailer.service';
-import { StripeModule } from '../stripe/stripe.module';
 
 @Module({
   imports: [
-     StripeModule,
     JwtModule.registerAsync({
     inject: [ConfigService],
     useFactory: (config: ConfigService) => ({
@@ -25,7 +23,7 @@ import { StripeModule } from '../stripe/stripe.module';
     MailService,
     UserService,
     AuthService,
-    DatabaseService,
+    PrismaService,
     JwtStrategy
   ],
 })

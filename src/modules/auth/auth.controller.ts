@@ -2,7 +2,7 @@ import { Controller, Post, Body, NotFoundException, Res, Req } from '@nestjs/com
 import { AuthService } from './auth.service';
 import { loginSchema } from './schema/login.schema';
 import { ZodValidationPipe } from 'src/pipes/zod/zod.validatePipe';
-import { DatabaseService } from '../database/database.service';
+import { PrismaService } from '../database/database.service';
 import { resetPasswordSchema, resetPasswordType } from './schema/reset-passwor.schema';
 import { Response, Request } from 'express';
 
@@ -10,7 +10,7 @@ import { Response, Request } from 'express';
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private prisma: DatabaseService
+    private prisma: PrismaService
   ) { }
 
   @Post('login')
@@ -40,6 +40,7 @@ export class AuthController {
   @Post('request-verification')
   async varifyAccount(@Body() body: { email: string }) {
     const { email } = body;
+  
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user || user.AccountVerification === true) throw new NotFoundException("Usuario não encontrado ou já ativo.");
 
