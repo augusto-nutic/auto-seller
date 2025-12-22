@@ -86,8 +86,6 @@ export class AuthController {
     return this.authService.handleVerificationAccount(token);
   }
 
-
-
   @Post('forgot-password')
   async forgotPassword(@Body('email') email: string) {
 
