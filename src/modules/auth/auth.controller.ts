@@ -5,13 +5,44 @@ import { ZodValidationPipe } from 'src/pipes/zod/zod.validatePipe';
 import { PrismaService } from '../database/database.service';
 import { resetPasswordSchema, resetPasswordType } from './schema/reset-passwor.schema';
 import { Response, Request } from 'express';
+import { createUserSchema } from '../user/schemas/create-user.schema';
+import { Prisma } from '@prisma/client';
+import { UserService } from '../user/user.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private prisma: PrismaService
+    private prisma: PrismaService,
+    private UserService: UserService,
   ) { }
+
+
+
+  @Post('register')
+    async create(
+      @Body(new ZodValidationPipe(createUserSchema)) data: Prisma.UserCreateInput,
+      @Res({ passthrough: true }) res: Response,
+    ) {
+      
+      const { user} = await this.UserService.create({...data,});
+      const {accessToken, refreshToken} = this.authService.generateAuthTokens(user.id, user.email);
+      
+      res.cookie('access_token', accessToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'strict',
+        maxAge: 1000 * 60 * 15, 
+      });
+      res.cookie('refresh_token', refreshToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'strict',
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+      });
+  
+      return user;
+    }
 
   @Post('login')
   async login(

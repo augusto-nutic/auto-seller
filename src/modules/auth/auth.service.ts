@@ -1,11 +1,11 @@
-import { BadRequestException, Inject, Injectable,  ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../database/database.service';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from '../mailer/mailer.service';
 import { ConfigService } from '@nestjs/config';
-import { Request,Response } from 'express';
+import { Request, Response } from 'express';
 
 
 @Injectable()
@@ -17,7 +17,7 @@ export class AuthService {
     private mailService: MailService
   ) {
   }
-   async login(data: { email: string; password: string }) {
+  async login(data: { email: string; password: string }) {
     const user = await this.prisma.user.findUnique({
       where: { email: data.email },
     });
@@ -56,7 +56,7 @@ export class AuthService {
     const expiresAt = new Date(Date.now() + 1000 * 60 * 30);
 
     try {
-      
+
       await this.prisma.accountVerifyToken.upsert({
         where: { email },
         update: {
@@ -161,7 +161,7 @@ export class AuthService {
     }
 
     try {
-       
+
       const payload = this.jwtService.verify(refreshToken, {
         secret: this.config.get('JWT_REFRESH_SECRET'),
       });
@@ -173,12 +173,12 @@ export class AuthService {
           expiresIn: '15m',
         },
       );
-  
+
       res.cookie('access_token', newAccessToken, {
         httpOnly: true,
         secure: false,
         sameSite: 'lax',
-        maxAge: 1000 * 60 * 15, 
+        maxAge: 1000 * 60 * 15,
       });
 
       return { message: 'Access token renovado com sucesso' };
@@ -186,5 +186,19 @@ export class AuthService {
       throw new UnauthorizedException('Refresh token inválido');
     }
   }
-}
+  generateAuthTokens(userId: string, email: string) {
+    const payload = { sub: userId, email: email };
 
+    const accessToken = this.jwtService.sign(payload, {
+      expiresIn: '15m',
+      secret: this.config.get('JWT_ACCESS_TOKEN'),
+    });
+
+    const refreshToken = this.jwtService.sign(payload, {
+      expiresIn: '7d',
+      secret: this.config.get('JWT_REFRESH_SECRET'),
+    });
+
+    return {accessToken, refreshToken};
+  }
+}

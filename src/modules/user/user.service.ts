@@ -29,25 +29,10 @@ export class UserService {
       },
     });
 
-    const payload = { sub: user.id, email: user.email };
-
-    const accessToken = this.jwtService.sign(payload, {
-      expiresIn: '15m',
-      secret: this.config.get('JWT_ACCESS_TOKEN'),
-    });
-
-    const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: '7d',
-      secret: this.config.get('JWT_REFRESH_SECRET'),
-    });
-
     const { password, ...userWithoutPassword } = user;
 
-    return {
-      user: userWithoutPassword,
-      accessToken,
-      refreshToken,
-    };
+    return {user: userWithoutPassword}
+  
   }
 
   async userExists({id,email,stripe_connect_id,stripe_id}:{id?: string, email?: string, stripe_id?: string, stripe_connect_id?: string}) {

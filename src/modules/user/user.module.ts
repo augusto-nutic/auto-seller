@@ -9,6 +9,6 @@ import { AuthModule } from '../auth/auth.module';
   imports: [AuthModule],
   controllers: [UserController],
   providers: [UserService, PrismaService],
-  exports: [UserService], // Exporte o UserService para que o StripeService possa usá-lo
+  exports: [UserService], 
 })
 export class UserModule {}

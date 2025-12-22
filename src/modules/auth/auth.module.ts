@@ -24,7 +24,8 @@ import { MailService } from '../mailer/mailer.service';
     UserService,
     AuthService,
     PrismaService,
-    JwtStrategy
+    JwtStrategy,
+    UserService
   ],
 })
 export class AuthModule { }
