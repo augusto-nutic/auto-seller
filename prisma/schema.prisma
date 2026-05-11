@@ -38,6 +38,25 @@ model User {
   updatedAt         DateTime @updatedAt
   
    
+
+  veichles Veichle[]
+}
+
+enum VeichleType {
+  CAR
+  MOTORCYCLE
+  OTHER
+}
+
+model Veichle{
+  id           String  @id @default(uuid())
+  type         VeichleType
+  model        String
+  brand        String
+  year         Int
+  license_plate String @unique
+  user_id      String? @unique
+  user         User?   @relation( fields: [user_id], references: [id])
 }
 
  model AccountVerifyToken {
