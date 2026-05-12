@@ -1,6 +1,4 @@
 import { AddressSchema } from 'src/schemas/address';
-import { cnpj } from 'src/schemas/cnpj';
-import { cpf } from 'src/schemas/cpf';
 import { z } from 'zod';
  
 
