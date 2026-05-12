@@ -20,6 +20,7 @@ export class UserController {
     const { user} = await this.UserService.create({...data,});
     return user
   }
+  
   @UseGuards(JwtAuthGuard)
   @Get("teste")
   findAll() {
