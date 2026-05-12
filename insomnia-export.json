@@ -1,0 +1,191 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-05-12T00:00:00.000Z",
+  "__export_source": "codex.insomnia-generator",
+  "resources": [
+    {
+      "_id": "wrk_drop_api",
+      "_type": "workspace",
+      "name": "drop-api",
+      "description": "Colecao gerada a partir das rotas encontradas no projeto NestJS."
+    },
+    {
+      "_id": "env_drop_api_base",
+      "_type": "environment",
+      "parentId": "wrk_drop_api",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:3000"
+      }
+    },
+    {
+      "_id": "fld_auth",
+      "_type": "request_group",
+      "parentId": "wrk_drop_api",
+      "name": "Auth"
+    },
+    {
+      "_id": "fld_user",
+      "_type": "request_group",
+      "parentId": "wrk_drop_api",
+      "name": "User"
+    },
+    {
+      "_id": "req_auth_register",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Register",
+      "method": "POST",
+      "url": "{{ _.base_url }}/auth/register",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"12345678\",\n  \"name\": \"Usuario Exemplo\",\n  \"cpf\": \"52998224725\",\n  \"contact_1\": \"11999999999\",\n  \"contact_2\": \"11888888888\",\n  \"address\": {\n    \"house_number\": \"123\",\n    \"street\": \"Rua das Flores\",\n    \"district\": \"Centro\",\n    \"city\": \"Sao Paulo\",\n    \"state\": \"SP\",\n    \"complement\": \"Apto 12\"\n  }\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "settingStoreCookies": true,
+      "settingSendCookies": true
+    },
+    {
+      "_id": "req_auth_login",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Login",
+      "method": "POST",
+      "url": "{{ _.base_url }}/auth/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"12345678\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "settingStoreCookies": true,
+      "settingSendCookies": true
+    },
+    {
+      "_id": "req_auth_request_verification",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Request Verification",
+      "method": "POST",
+      "url": "{{ _.base_url }}/auth/request-verification",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"user@example.com\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "settingStoreCookies": true,
+      "settingSendCookies": true
+    },
+    {
+      "_id": "req_auth_verify_account",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Verify Account",
+      "method": "POST",
+      "url": "{{ _.base_url }}/auth/verify-account",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"token\": \"verification-token\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "req_auth_forgot_password",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Forgot Password",
+      "method": "POST",
+      "url": "{{ _.base_url }}/auth/forgot-password",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"user@example.com\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "req_auth_reset_password",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Reset Password",
+      "method": "POST",
+      "url": "{{ _.base_url }}/auth/reset-password",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"token\": \"reset-token\",\n  \"newPassword\": \"novaSenha123\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "req_auth_refresh",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Refresh",
+      "method": "POST",
+      "url": "{{ _.base_url }}/auth/refresh",
+      "headers": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true
+    },
+    {
+      "_id": "req_user_create",
+      "_type": "request",
+      "parentId": "fld_user",
+      "name": "Create User",
+      "method": "POST",
+      "url": "{{ _.base_url }}/user/create",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"user2@example.com\",\n  \"password\": \"12345678\",\n  \"name\": \"Novo Usuario\",\n  \"cnpj\": \"11444777000161\",\n  \"contact_1\": \"11977777777\",\n  \"address\": {\n    \"house_number\": \"456\",\n    \"street\": \"Avenida Brasil\",\n    \"district\": \"Jardins\",\n    \"city\": \"Sao Paulo\",\n    \"state\": \"SP\"\n  }\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "settingStoreCookies": true,
+      "settingSendCookies": true
+    },
+    {
+      "_id": "req_user_teste",
+      "_type": "request",
+      "parentId": "fld_user",
+      "name": "Teste",
+      "method": "GET",
+      "url": "{{ _.base_url }}/user/teste",
+      "headers": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true
+    }
+  ]
+}
