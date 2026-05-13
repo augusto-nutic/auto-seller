@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"  
+}
+
+model Address {
+  id           String  @id @default(uuid())
+  house_number String?
+  street       String?
+  district     String?
+  city         String?
+  state        String?
+  complement   String?
+
+  user_id     String?  @unique
+  user        User?    @relation( fields: [user_id], references: [id])
+}
+
+model Enterprise {
+  //personal data
+  id           String  @id @unique @default(uuid())
+  email        String  @unique
+  password     String
+  name         String
+  cnpj         String  @unique
+  contact_1    String
+  contact_2    String?
+  address      Address?  
+  AccountVerification Boolean @default(false)
+  
+  //timestamp
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+}
+
+model Administrative_Module{}
+
+model Sector {}
+
+model Members {}
+
+model Result_Area{}
+
+model Indicator {}
+
+model IndicatorHistory{}
+
+model StrategicObjective{}
+
+model Task {}
+
+model TaskComments {}
+
+
+
+
+
+
+ model AccountVerifyToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  email     String   @unique 
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  email     String   @unique 
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+
+

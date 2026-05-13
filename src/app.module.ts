@@ -19,3 +19,17 @@ import { MailerCustomModule } from './modules/mailer/mailer.module';
   providers: [AppService],
 })
 export class AppModule {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
