@@ -1,80 +1,82 @@
-generator client {
-  provider = "prisma-client-js"
-}
+// generator client {
+//   provider = "prisma-client-js"
+// }
 
-datasource db {
-  provider = "postgresql"  
-}
+// datasource db {
+//   provider = "postgresql"  
+// }
 
-model Address {
-  id           String  @id @default(uuid())
-  house_number String?
-  street       String?
-  district     String?
-  city         String?
-  state        String?
-  complement   String?
+// model Address {
+//   id           String  @id @default(uuid())
+//   house_number String?
+//   street       String?
+//   district     String?
+//   city         String?
+//   state        String?
+//   complement   String?
 
-  user_id     String?  @unique
-  user        User?    @relation( fields: [user_id], references: [id])
-}
+//   Enterprise_id     String?  @unique
+//   Enterprise        Enterprise?    @relation( fields: [Enterprise_id], references: [id])
+// }
 
-model Enterprise {
-  //personal data
-  id           String  @id @unique @default(uuid())
-  email        String  @unique
-  password     String
-  name         String
-  cnpj         String  @unique
-  contact_1    String
-  contact_2    String?
-  address      Address?  
-  AccountVerification Boolean @default(false)
+// model Enterprise {
+//   //personal data
+//   id           String  @id @unique @default(uuid())
+//   email        String  @unique
+//   password     String
+//   name         String
+//   cnpj         String  @unique
+//   contact_1    String
+//   contact_2    String?
+//   address      Address?  
+//   AccountVerification Boolean @default(false)
   
-  //timestamp
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+//   //timestamp
+//   createdAt         DateTime @default(now())
+//   updatedAt         DateTime @updatedAt
   
-}
+// }
 
-model Administrative_Module{}
+// model Administrative_Module{}
 
-model Sector {}
+// model Sector {
+  
+// }
 
-model Members {}
+// model Members {}
 
-model Result_Area{}
+// model Result_Area{}
 
-model Indicator {}
+// model Indicator {}
 
-model IndicatorHistory{}
+// model IndicatorHistory{}
 
-model StrategicObjective{}
+// model StrategicObjective{}
 
-model Task {}
+// model Task {}
 
-model TaskComments {}
-
-
-
-
+// model TaskComments {}
 
 
- model AccountVerifyToken {
-  id        String   @id @default(uuid())
-  token     String   @unique
-  email     String   @unique 
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-}
 
-model PasswordResetToken {
-  id        String   @id @default(uuid())
-  token     String   @unique
-  email     String   @unique 
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-}
+
+
+
+// model AccountVerifyToken {
+//   id        String   @id @default(uuid())
+//   token     String   @unique
+//   email     String   @unique 
+//   expiresAt DateTime
+//   createdAt DateTime @default(now())
+// }
+
+// model PasswordResetToken {
+//   id        String   @id @default(uuid())
+//   token     String   @unique
+//   email     String   @unique 
+//   expiresAt DateTime
+//   createdAt DateTime @default(now())
+// }
 
 
 

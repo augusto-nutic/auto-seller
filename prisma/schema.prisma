@@ -16,31 +16,13 @@ model Address {
   state        String?
   complement   String?
 
-  user_id     String?  @unique
-  user        User?    @relation( fields: [user_id], references: [id])
 
   enterprise_id     String?  @unique
   enterprise        Enterprise?    @relation( fields: [enterprise_id], references: [id])
 }
 
+
 model Enterprise {
-  id           String  @id @default(uuid())
-  name         String
-  cnpj         String @unique
-  contact_1    String
-  contact_2    String?
-
-  //relations
-  users         User[] 
-
-  address      Address?
-  //timestamp
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-}
-
-model User {
   //user data
   id           String  @id @unique @default(uuid())
   email        String  @unique
@@ -50,30 +32,32 @@ model User {
   contact_2    String?
   address      Address?  
   AccountVerification Boolean @default(false)
-
+  cnpj         String  @unique
 
   //relations
-  enterpriseId String
-  enterprise   Enterprise @relation(fields: [enterpriseId], references: [id])
   
+  administrative_modules Administrative_Module[]
   
   //timestamp
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
-  
-
 }
 
 
+model Administrative_Module{
+  id        String   @id @default(uuid())
+  name      String
+  enterprise_id String
+  enterprise    Enterprise @relation(fields: [enterprise_id], references: [id])
+}
 
- model AccountVerifyToken {
+model AccountVerifyToken {
   id        String   @id @default(uuid())
   token     String   @unique
   email     String   @unique 
   expiresAt DateTime
   createdAt DateTime @default(now())
 }
-
 model PasswordResetToken {
   id        String   @id @default(uuid())
   token     String   @unique
@@ -81,6 +65,5 @@ model PasswordResetToken {
   expiresAt DateTime
   createdAt DateTime @default(now())
 }
-
 
 
