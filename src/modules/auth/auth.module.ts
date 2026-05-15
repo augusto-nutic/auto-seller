@@ -5,7 +5,7 @@ import { PrismaService } from '../database/database.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './JWT/jwt.strategy';
-import { UserService } from '../enterprise/user.service';
+import { EnterpriseService } from '../enterprise/enterprise.service';
 import { MailService } from '../mailer/mailer.service';
 
 @Module({
@@ -21,11 +21,11 @@ import { MailService } from '../mailer/mailer.service';
   controllers: [AuthController],
   providers: [
     MailService,
-    UserService,
+    EnterpriseService,
     AuthService,
     PrismaService,
     JwtStrategy,
-    UserService
+    EnterpriseService
   ],
 })
 export class AuthModule { }

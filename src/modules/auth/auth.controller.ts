@@ -5,9 +5,9 @@ import { ZodValidationPipe } from 'src/pipes/zod/zod.validatePipe';
 import { PrismaService } from '../database/database.service';
 import { resetPasswordSchema, resetPasswordType } from './schema/reset-passwor.schema';
 import { Response, Request } from 'express';
-import { createUserSchema } from '../enterprise/schemas/create-user.schema';
+import { createEnterpriseSchema } from '../enterprise/schemas/create-enterprise.schema';
 import { Prisma } from '@prisma/client';
-import { UserService } from '../enterprise/user.service';
+import { EnterpriseService } from '../enterprise/enterprise.service';
 import { JwtAuthGuard } from '../auth/JWT/jwt.guard';
 
 
@@ -16,16 +16,16 @@ export class AuthController {
   constructor(
     private authService: AuthService,
     private prisma: PrismaService,
-    private UserService: UserService,
+    private enterpriseService: EnterpriseService,
   ) { }
 
   @Post('register')
     async create(
-      @Body(new ZodValidationPipe(createUserSchema)) data: Prisma.UserCreateInput,
+      @Body(new ZodValidationPipe(createEnterpriseSchema)) data: Prisma.EnterpriseCreateInput,
       @Res({ passthrough: true }) res: Response,
     ) {
       
-      const { user} = await this.UserService.create({...data,});
+      const { user} = await this.enterpriseService.create({...data,});
       const {accessToken, refreshToken} = this.authService.generateAuthTokens(user.id, user.email);
       
       res.cookie('access_token', accessToken, {
@@ -74,7 +74,7 @@ export class AuthController {
   async varifyAccount(@Body() body: { email: string }) {
     const { email } = body;
   
-    const user = await this.prisma.user.findUnique({ where: { email } });
+    const user = await this.prisma.enterprise.findUnique({ where: { email } });
     if (!user || user.AccountVerification === true) throw new NotFoundException("Usuario não encontrado ou já ativo.");
 
     return await this.authService.handleRequestVerification(email);
@@ -89,7 +89,7 @@ export class AuthController {
   @Post('forgot-password')
   async forgotPassword(@Body('email') email: string) {
 
-    const user = await this.prisma.user.findUnique({ where: { email } });
+    const user = await this.prisma.enterprise.findUnique({ where: { email } });
     if (!user) throw new NotFoundException("Usuario nao encontrado");
 
     return await this.authService.handleForgotPassword(email);

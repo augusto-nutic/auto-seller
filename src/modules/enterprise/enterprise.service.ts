@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 
 
 @Injectable()
-export class UserService {
+export class EnterpriseService {
 
   constructor
     (@Inject() private prisma: PrismaService,
@@ -16,16 +16,16 @@ export class UserService {
       private config: ConfigService,
     ) { }
 
-  async create(data: Prisma.UserCreateInput) {
+  async create(data: Prisma.EnterpriseCreateInput) {
     await this.validateUniqueFields(data);
 
     const hashPassword = await b.hash(data.password, 10);
 
-    const user = await this.prisma.user.create({
+    const user = await this.prisma.enterprise.create({
       data: {
         ...data,
         password: hashPassword,
-        address: data.address ? { create:data.address} : undefined,
+        address: data.address,
       },
     });
 
@@ -41,7 +41,7 @@ export class UserService {
     }
 
     try {
-      const user = await this.prisma.user.findFirst({
+      const user = await this.prisma.enterprise.findFirst({
         where: {
           OR: [
             id ? { id } : undefined,
@@ -62,32 +62,27 @@ export class UserService {
     }
   }
 
-  async update(id: string, data: Partial<Prisma.UserUpdateInput>) {
+  async update(id: string, data: Partial<Prisma.EnterpriseUpdateInput>) {
     if (data.password) {
       data.password = await b.hash(data.password as string, 10);
     }
 
-    return this.prisma.user.update({
+    return this.prisma.enterprise.update({
       where: { id },
       data,
     });
   }
 
-  private async validateUniqueFields(data: Prisma.UserCreateInput) {
-    const { email, cpf, cnpj } = data;
+  private async validateUniqueFields(data: Prisma.EnterpriseCreateInput) {
+    const { email,cnpj } = data;
 
-    const [emailExists, cpfExists, cnpjExists] = await Promise.all([
-      this.prisma.user.findUnique({ where: { email } }),
-      cpf ? this.prisma.user.findUnique({ where: { cpf } }) : null,
-      cnpj ? this.prisma.user.findUnique({ where: { cnpj } }) : null,
+    const [emailExists, cnpjExists] = await Promise.all([
+      this.prisma.enterprise.findUnique({ where: { email } }),
+      cnpj ? this.prisma.enterprise.findUnique({ where: { cnpj } }) : null,
     ]);
 
     if (emailExists) {
       throw new ConflictException('Já existe um usuário com esse e-mail');
-    }
-
-    if (cpfExists) {
-      throw new ConflictException('Já existe um usuário com esse CPF');
     }
 
     if (cnpjExists) {
@@ -96,7 +91,7 @@ export class UserService {
   }
   
   async findByEmail(email: string) {
-    const user = await this.prisma.user.findUnique({ where: { email } });
+    const user = await this.prisma.enterprise.findUnique({ where: { email } });
     return user;
   }
 }

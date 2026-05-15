@@ -18,7 +18,7 @@ export class AuthService {
   ) {
   }
   async login(data: { email: string; password: string }) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.enterprise.findUnique({
       where: { email: data.email },
     });
 
@@ -111,7 +111,7 @@ export class AuthService {
       throw new BadRequestException('Token inválido ou expirado');
     }
     try {
-      await this.prisma.user.update({
+      await this.prisma.enterprise.update({
         where: { email: record.email },
         data: { AccountVerification: true },
       });
@@ -137,7 +137,7 @@ export class AuthService {
 
     const hashed = await bcrypt.hash(newPassword, 10);
     try {
-      await this.prisma.user.update({
+      await this.prisma.enterprise.update({
         where: { email: record.email },
         data: { password: hashed },
       });

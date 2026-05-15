@@ -8,16 +8,16 @@ import { JwtAuthGuard } from '../auth/JWT/jwt.guard';
 
 @Controller('user')
 @UseGuards(JwtAuthGuard)
-export class UserController {
+export class EnterpriseController {
   constructor(
-    private readonly EnterpriseService: EnterpriseService,
+    private readonly enterpriseService: EnterpriseService,
   ) { }
 
   @Post('create')
   async create(
     @Body(new ZodValidationPipe(createEnterpriseSchema)) data: Prisma.EnterpriseCreateInput,
   ) {
-    const { user} = await this.EnterpriseService.create({...data,});
+    const { user} = await this.enterpriseService.create({...data,});
     return user
   }
   
