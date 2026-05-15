@@ -71,7 +71,7 @@ export class AuthService {
       });
     } catch (error) {
       throw new ServiceUnavailableException({
-        error: error.message ?? error,
+        error,
         message: 'Erro ao salvar token. Tente novamente mais tarde.',
       });
     }
@@ -97,7 +97,7 @@ export class AuthService {
       });
     } catch (error) {
       throw new ServiceUnavailableException({
-        error: error.message ?? error,
+        error,
         message: 'Erro ao salvar token. Tente novamente mais tarde.',
       });
     }
