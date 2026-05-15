@@ -15,9 +15,9 @@ model Address {
   state        String?
   complement   String?
 
+ 
 
-  enterprise_id     String?  @unique
-  enterprise        Enterprise?    @relation( fields: [enterprise_id], references: [id])
+  enterprises Enterprise?
 }
 
 model Enterprise {
@@ -28,26 +28,37 @@ model Enterprise {
   name         String?
   contact_1    String
   contact_2    String?
-  address      Address?  
+
+  //relations
+  AddressId String @unique
+  address    Address @relation(fields: [AddressId], references: [id])
+
+
+
   AccountVerification Boolean @default(false)
   cnpj         String  @unique
 
   //relations
+  members Member[]
+  administrative_modules AdministrativeModule[]
   
-  administrative_modules Administrative_Module[]
   
   //timestamp
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+
+
+  roles Role[]
 }
 
-model Administrative_Module{
+model AdministrativeModule{
   id        String   @id @default(uuid())
   name      String
-  enterprise_id String
-  enterprise    Enterprise @relation(fields: [enterprise_id], references: [id])
+  enterpriseId String
+  enterprise    Enterprise @relation(fields: [enterpriseId], references: [id], onDelete: Cascade)
   //relations
   sectors    Sector[]
+  @@index([enterpriseId])
 }
 
 model Sector{
@@ -55,23 +66,48 @@ model Sector{
   name      String
 
   //relations
-  administrative_module_id String
-  administrative_module    Administrative_Module @relation(fields: [administrative_module_id], references: [id])
+  members Member[]
+  administrativeModuleId String
+  administrativeModule    AdministrativeModule @relation(fields: [administrativeModuleId], references: [id], onDelete: Cascade)
+  @@index([administrativeModuleId])
 }
+
 model Member {
   id        String   @id @default(uuid())
   name      String
-  email     String   @unique
+  email     String  
   password  String
   contact_1 String
   contact_2 String?
   
   //relations
-  enterprise_id String
-  enterprise    Enterprise @relation(fields: [enterprise_id], references: [id])
+  sectors Sector[]
+  roles Role[]
+  enterpriseId String
+  enterprise    Enterprise @relation(fields: [enterpriseId], references: [id], onDelete: Cascade)
+
+  @@index([enterpriseId])
+  @@unique([email, enterpriseId])
 }
 
+model Role {
+  id        String   @id @default(uuid())
+  name      String   
+  //relations
+  enterpriseID String
+  enterprise    Enterprise @relation(fields: [enterpriseID], references: [id], onDelete: Cascade)
+  permissions Permission[]
+  members Member[]
 
+  @@unique([name, enterpriseID])
+}
+
+model Permission {
+  id    String @id @default(uuid())
+  name  String @unique
+
+  roles Role[]
+}
 
 model AccountVerifyToken {
   id        String   @id @default(uuid())
