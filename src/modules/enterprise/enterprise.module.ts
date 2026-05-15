@@ -1,5 +1,4 @@
-// user.module.ts
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { PrismaService } from '../database/database.service';
@@ -11,4 +10,4 @@ import { AuthModule } from '../auth/auth.module';
   providers: [UserService, PrismaService],
   exports: [UserService], 
 })
-export class UserModule {}
+export class EnterpriseModule {}

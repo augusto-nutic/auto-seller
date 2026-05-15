@@ -5,9 +5,9 @@ import { ZodValidationPipe } from 'src/pipes/zod/zod.validatePipe';
 import { PrismaService } from '../database/database.service';
 import { resetPasswordSchema, resetPasswordType } from './schema/reset-passwor.schema';
 import { Response, Request } from 'express';
-import { createUserSchema } from '../user/schemas/create-user.schema';
+import { createUserSchema } from '../enterprise/schemas/create-user.schema';
 import { Prisma } from '@prisma/client';
-import { UserService } from '../user/user.service';
+import { UserService } from '../enterprise/user.service';
 import { JwtAuthGuard } from '../auth/JWT/jwt.guard';
 
 
