@@ -99,7 +99,7 @@ model Role {
   permissions Permission[]
   members Member[]
 
-  @@unique([name, enterpriseID])
+  @@unique([name, enterpriseID]) 
 }
 
 model Permission {
